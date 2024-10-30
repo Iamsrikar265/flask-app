@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exists</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+
+h3 {
+    color: #333;
+    font-weight: bold;
+}
+
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+</head>
+<body>
+    <h3>The thing you are trying to add already exists!</h3><br><br>
+<a href="{{url_for('librarianfeed',user_id=current_user.user_id)}}">Go to feed</a>
+</body>
+</html>

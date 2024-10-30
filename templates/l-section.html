@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{section.section_name}}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+        .left-column {
+            width: 30%;
+        }
+        .middle-column {
+            width: 30%;
+        }
+        .right-column {
+            width: 30%;
+        }
+        .books-list {
+            margin-top: 20px;
+        }
+        .books-list a {
+            display: block;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+        .books-list a:hover {
+            text-decoration: underline;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>{{section.section_name}}</header>
+    <div class="container">
+        <div class="left-column">
+            <h3>Description</h3>
+            <p>{{section.s_description}}</p>
+            <h3>Date Created</h3>
+            <p>{{section.s_date.strftime('%Y-%m-%d')}}</p><br><br>
+            <a href="{{ url_for('librarianfeed', user_id=current_user.user_id) }}">Go to feed</a>
+        </div>
+        <div class="middle-column">
+            <img src="{{url_for('static', filename='bookimages/' + section.s_image)}}"><br>
+            <a href="{{url_for('editsection',section_id=section.section_id)}}">Edit the Section</a><br><br>
+            <a href="{{url_for('deletesection',section_id=section.section_id)}}">Delete the Section</a>
+        </div>
+        <div class="right-column">
+            <h3>Books available in this section</h3>
+            <div class="books-list">
+                {% for i in k %}
+                <a href="{{url_for('lbook',book_id=i.book_id)}}">{{i.bookname}}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add a Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2><i>Upload a Book:</i></h2>
+        <form method="POST" action="{{url_for('addbook')}}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div>
+                <label for="bookname">Book Name:</label>
+                {{form.bookname}}
+            </div>
+            <div>
+                <label for="book">Upload Book:</label>
+                {{form.book}}
+            </div>
+            <div>
+                <label for="author">Author:</label>
+                {{form.author}}
+            </div>
+            <div>
+                <label for="image">Book Image:</label>
+                {{form.image}}
+            </div>
+            <div>
+                <label for="description">Description:</label>
+                {{form.description}}
+            </div>
+            <div>
+                <input type="submit" value="Add Book">
+            </div>
+        </form>
+        <p>Go to feed:</p>
+        <a href="{{url_for('librarianfeed')}}">Go to feed</a>
+    </div>
+</body>
+</html>

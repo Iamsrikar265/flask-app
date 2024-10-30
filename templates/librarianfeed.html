@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Librarian's Feed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+        .left-column,
+        .middle-column,
+        .right-column {
+            width: calc(33.33% - 10px);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .left-column {
+            background-color: #fff;
+        }
+        .middle-column,
+        .right-column {
+            background-color: #6ea5ad19;
+        }
+        .links-section {
+            margin-bottom: 20px;
+        }
+        .books-section,
+        .sections-section {
+            margin-top: 20px;
+        }
+        .book-item,
+        .section-item {
+            margin-bottom: 10px;
+        }
+        .book-item img,
+        .section-item img {
+            max-width: 100px;
+            height: auto;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: 1px solid #000;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: 1px solid #000;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <header>Librarian Feed</header>
+    <div class="container">
+        <div class="left-column">
+            <div class="links-section">
+                <a href="{{url_for('addbook')}}">Add a Book</a><br><br>
+                <a href="{{url_for('addsection')}}">Add a Section</a>
+            </div>
+            <form method="POST">
+                {{ s_form.hidden_tag() }}
+                <div>
+                    {{ s_form.search.label }}
+                    {{ s_form.search }}
+                </div>
+                <div>
+                    <button type="submit" name="search_submit" value="Search">Search</button>
+                </div>
+                {% for user_book in user_books %}
+    <p>{{ user_book.u_name }} has requested the book, {{ user_book.b_name }}</p>
+    <form method="POST">
+        {{ grant_form.hidden_tag() }}
+        <input type="hidden" name="user_book_uid" value="{{ user_book.uid }}">
+        <input type="hidden" name="user_book_bid" value="{{ user_book.bid }}">
+
+        <button type="submit" name="grant_submit" value="Grant">Grant</button>
+    </form>
+    <form method="POST">
+        {{ reject_form.hidden_tag() }}
+        <input type="hidden" name="user_book_uid" value="{{ user_book.uid }}">
+        <input type="hidden" name="user_book_bid" value="{{ user_book.bid }}">
+
+        <button type="submit" name="reject_submit" value="Reject">Reject</button>
+    </form>
+    {% endfor %}
+    {% for user_book in received_books %}
+    <p>{{ user_book.u_name }} has received the book, {{ user_book.b_name }}</p>
+    <form method="POST">
+        {{ revoke_form.hidden_tag() }}
+        <input type="hidden" name="user_book_uid" value="{{ user_book.uid }}">
+        <input type="hidden" name="user_book_bid" value="{{ user_book.bid }}">
+
+        <button type="submit" name="revoke_submit" value="Revoke">Revoke</button>
+    </form>
+{% endfor %}<br><br>
+                <a href="{{url_for('statspage',user_id=current_user.user_id)}}">Library Statistics</a>
+            </form>
+        </div>
+        <div class="middle-column">
+            <h3>All Books</h3>
+            <div class="books-section">
+                {% for book in books %}
+                <div class="book-item">
+                    <b>{{ book.bookname }}</b><br>
+                    <img src="{{url_for('static', filename='bookimages/' + book.image)}}"><br>
+                    <i>Description of the Book:</i><br>
+                    {{ book.description[0:15] }}.....<br>
+                    <i>Author:</i> {{ book.author }}<br>
+                    <a href="{{url_for('lbook', book_id=book.book_id)}}">View Book</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="right-column">
+            <h3>All Sections</h3>
+            <div class="sections-section">
+                {% for section in sections %}
+                <div class="section-item">
+                    <b>{{ section.section_name }}</b><br>
+                    <img src="{{url_for('static', filename='bookimages/' + section.s_image)}}"><br>
+                    <i>Description of the Section:</i><br>
+                    {{ section.s_description[0:15] }}.....<br>
+                    <a href="{{url_for('lsection', section_id=section.section_id)}}">View Section</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% if reminders %}
+    <h2>Reminders</h2>
+    {% for reminder in reminders %}
+    <p>{{ reminder }}</p>
+    {% endfor %}
+    {% endif %}
+    <a href="{{url_for('logout')}}">Logout</a>
+</body>
+</html>

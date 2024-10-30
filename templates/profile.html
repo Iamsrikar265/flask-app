@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{user.username}}'s profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #d7c0d0;
+            border: 3px solid #000;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h4 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        h5 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        form div {
+            margin-bottom: 10px;
+        }
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        form input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        form input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form input[type="submit"]:hover {
+            background-color: #555;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .notes-list {
+            margin-top: 20px;
+        }
+        h1 {
+            color: #000;
+            margin: 0;
+            padding: 10px 0;
+            font-family: cursive;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>My Profile</h1>
+    </div>
+    <div class="container">
+        <div>
+            <h4 style="font-family: cursive;">{{user.username}}</h4>
+            <h5>User's statistics</h5>
+            {% if counts and counts != [0, 0, 0] %}
+            <img src="{{ url_for('static', filename='bookimages/' + bar_chart) }}">
+            {% else %}
+            <p>No data available for the bar chart.</p>
+            {% endif %}
+        </div>
+        <div>
+            <h5>Section Distribution</h5>
+            {% if sections %}
+            <img src="{{ url_for('static', filename='bookimages/' + pie_chart) }}">
+            {% else %}
+            <p>No data available for the pie chart.</p>
+            {% endif %}
+        </div>
+        <br><br>
+        <form method="POST" action="{{url_for('profile',user_id=current_user.user_id)}}" enctype="multipart/form-data">
+            {{form.hidden_tag()}}
+            <div>
+                {{form.notes.label}}
+                {{form.notes}}
+            </div>
+            <div>
+                {{form.submit}}
+            </div>
+        </form>
+        {% if notes %}
+        <div class="notes-list">
+            <h5>Notes:</h5>
+            {% for note in notes %}
+            <p>{{ note.notes }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <a href="{{url_for('userfeed',user_id=current_user.user_id)}}">Go to feed</a>
+    </div>
+</body>
+</html>

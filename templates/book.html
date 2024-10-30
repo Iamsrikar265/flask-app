@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ b.bookname }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #d7c0d0;
+            border: 3px solid #000;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .left-section {
+            flex: 1;
+            padding-right: 20px;
+        }
+        .middle-section {
+            flex: 1;
+            padding: 0 20px;
+            text-align: center;
+        }
+        .right-section {
+            flex: 1;
+            padding-left: 20px;
+        }
+        .book-info {
+            margin-bottom: 20px;
+        }
+        .feedbacks {
+            margin-top: 20px;
+        }
+        h2, h4, h5 {
+            font-weight: bold;
+        }
+        h1 {
+            color: #000;
+            margin: 0;
+            padding: 10px 0;
+            font-family: cursive;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ b.bookname }}</h1>
+        </div>
+        <div class="content">
+            <div class="left-section">
+                <h2>Description:</h2>
+                <p>{{ b.description }}</p><br><br><br>
+                <a href="{{ url_for('userfeed', user_id=current_user.user_id) }}">Go to feed</a>
+            </div>
+            <div class="middle-section">
+                <div class="book-info">
+                    <img src="{{ url_for('static', filename='bookimages/' + b.image) }}" alt="Book Image" width="200">
+                    <h5>Author:</h5> {{ b.author }}
+                    <h5>Date Uploaded:</h5> {{ b.date.strftime('%Y-%m-%d') }}
+                    {%if ub1%}
+                    {%if ub1.status=='received'%}
+                    <h5>Read:</h5><a href="{{url_for('static', filename='uploads/' + b.file_path)}}">View Content</a>
+                    {%endif%}
+                    {%endif%}<br><br>
+                    {%if ub1%}
+                        {%if ub1.status=='received'%}
+                            <form method="POST" action="{{url_for('book',book_id=b.book_id)}}">
+                                {{ req.hidden_tag() }}
+                                    <div>
+                                        <button type="submit" name="return" value="Return">Return</button>
+                                    </div>
+                            </form>
+                        {%elif ub1.status=='requested'%}
+                            <form method="POST" action="{{url_for('book',book_id=b.book_id)}}" name="crequestForm">
+                                {{req.hidden_tag() }}
+                                    <div>
+                                        {{req.submit}}
+                                    </div>
+                            </form>
+                        {%endif%}
+                    {%else%}
+                    <form method="POST" action="{{url_for('book',book_id=b.book_id)}}" name="requestForm">
+                        {{ req.hidden_tag() }}
+                            <div>
+                                {{ req.submit }}
+                            </div>
+                    {%endif%}<br>
+                    {%if ub1%}
+                    {%if ub1.status=='received'%}
+                    <form method="POST" action="{{ url_for('book', book_id=b.book_id) }}">
+                        {{ fed.hidden_tag() }}
+                        <div>
+                            {{ fed.feedback.label }}
+                            {{ fed.feedback }}
+                        </div>
+                        <div>
+                            <button type="submit" name="fed_submit" value="Feedback">Submit</button>
+                        </div>
+                    </form>
+                    {%endif%}
+                    {%endif%}
+                </div>
+            </div>
+            <div class="right-section">
+                <h5>User's Feedbacks:</h5>
+                <div class="feedbacks">
+                    {% for i in k %}
+                        <p>{{ i.uname }}'s feedback: {{ i.feedback }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

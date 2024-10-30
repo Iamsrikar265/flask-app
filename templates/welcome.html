@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f0fc; /* Light purple */
+            color: #6e1fb4; /* Dark purple */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h3 {
+            color: #f03c7e; /* Pink */
+        }
+        a {
+            color: #f03c7e; /* Pink */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Your registration is successful..</h3>
+        <h4><i>It's great to have you!</i></h4><br><br>
+        You can login and start your reading journey here: <a href="{{url_for('userlogin')}}">Login</a>
+    </div>
+    <a href="{{url_for('home')}}">Go to Home</a>
+</body>
+</html>

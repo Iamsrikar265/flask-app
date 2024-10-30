@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User's Feed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+        .left-column,
+        .middle-column,
+        .right-column {
+            width: calc(33.33% - 10px);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .left-column {
+            background-color: #fff;
+        }
+        .middle-column,
+        .right-column {
+            background-color: #6ea5ad19;
+        }
+        .section h3 {
+            margin-bottom: 10px;
+        }
+        .book-item {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #d7c0d0;
+            border: 3px solid #000;
+        }
+        h1 {
+            color: #000;
+            margin: 0;
+            padding: 10px 0;
+            font-family: cursive;
+        }
+    </style>
+</head>
+<body>
+    <div class="header"><h1>User's Feed</h1></div>
+    <div class="container">
+        <!-- First 1/3rd -->
+        <div class="left-column">
+            <h3>Search</h3>
+            <form method="POST" action="{{url_for('userfeed',user_id=current_user.user_id)}}">
+                {{ s_form.hidden_tag() }}
+                <div>
+                    {{ s_form.search.label }}
+                    {{ s_form.search }}
+                </div>
+                <div>
+                    {{s_form.submit}}
+                </div>
+            </form><br>
+            <a href="{{url_for('profile',user_id=current_user.user_id)}}">My Profile</a><br><br>
+            <a href="{{url_for('logout')}}">Logout</a><br><br>
+            <h4>My Books</h4>
+            {%for i in u_books%}
+                {%if i.status=='received'%}
+                    <div class="book-item">
+                        <a href="{{url_for('book',book_id=i.bid)}}">{{i.b_name}}</a>
+                    </div>
+                {%endif%}
+            {%endfor%}
+        </div>
+
+        <!-- Middle 1/3rd -->
+        <div class="middle-column">
+            <h3>All Books</h3>
+            {%for book in books%}
+                <div class="book-item">
+                    <b>{{book.bookname}}</b><br>
+                    <img src="{{url_for('static', filename='bookimages/' + book.image)}}"><br>
+                    <i>Description of the Book:</i><br>
+                    {{book.description[0:15]}}.....<br>
+                    <i>Author:</i>{{book.author}}<br>
+                    <a href="{{url_for('book', book_id=book.book_id)}}">View Book</a>
+                </div>
+            {%endfor%}
+        </div>
+
+        <!-- Last 1/3rd -->
+        <div class="right-column">
+            <h3>All Sections</h3>
+            {%for section in sections%}
+                <div class="book-item">
+                    <b>{{section.section_name}}</b><br>
+                    <img src="{{url_for('static', filename='bookimages/' + section.s_image)}}"><br>
+                    <i>Description of the Section:</i><br>
+                    {{section.s_description[0:15]}}......<br>
+                    <a href="{{url_for('section', section_id=section.section_id)}}">View Section</a>
+                </div>
+            {%endfor%}
+        </div>
+    </div>
+    <a href="{{url_for('home')}}">Go to Home</a>
+</body>
+</html>
+
